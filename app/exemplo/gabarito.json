@@ -1,0 +1,834 @@
+{
+ "formato": "provas-qr/1",
+ "id": "MACRO1-EXEMPLO-2026",
+ "titulo": "Macroeconomia I — Prova de exemplo",
+ "pontuacao": {
+  "multipla_varias": "proporcional_desconto",
+  "vf": "proporcional"
+ },
+ "layout": {
+  "largura": 160.0,
+  "marcador": 7.0,
+  "qr": [
+   12.0,
+   9.0,
+   30.0
+  ],
+  "bolha_r": 2.4
+ },
+ "versoes": {
+  "1": {
+   "altura": 109.0,
+   "aluno": null,
+   "linhas": [
+    {
+     "q": 2,
+     "id": "mult-grego",
+     "rotulo": "2",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      2
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       50.0
+      ],
+      [
+       26.0,
+       50.0
+      ],
+      [
+       33.0,
+       50.0
+      ],
+      [
+       40.0,
+       50.0
+      ],
+      [
+       47.0,
+       50.0
+      ]
+     ]
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3a",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       57.0
+      ],
+      [
+       26.0,
+       57.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3b",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       64.0
+      ],
+      [
+       26.0,
+       64.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3c",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       71.0
+      ],
+      [
+       26.0,
+       71.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3d",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       78.0
+      ],
+      [
+       26.0,
+       78.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 4,
+     "id": "mult-varias-crowding",
+     "rotulo": "4",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      1,
+      2,
+      3
+     ],
+     "peso": 1.5,
+     "bolhas": [
+      [
+       19.0,
+       85.0
+      ],
+      [
+       26.0,
+       85.0
+      ],
+      [
+       33.0,
+       85.0
+      ],
+      [
+       40.0,
+       85.0
+      ],
+      [
+       47.0,
+       85.0
+      ]
+     ]
+    },
+    {
+     "q": 5,
+     "id": "mult-integral",
+     "rotulo": "5",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       92.0
+      ],
+      [
+       26.0,
+       92.0
+      ],
+      [
+       33.0,
+       92.0
+      ],
+      [
+       40.0,
+       92.0
+      ]
+     ]
+    },
+    {
+     "q": 6,
+     "id": "mult-multiplicador",
+     "rotulo": "6",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       99.0
+      ],
+      [
+       26.0,
+       99.0
+      ],
+      [
+       33.0,
+       99.0
+      ],
+      [
+       40.0,
+       99.0
+      ],
+      [
+       47.0,
+       99.0
+      ]
+     ]
+    }
+   ],
+   "abertas": [
+    {
+     "q": 1,
+     "id": "aberta-islm",
+     "peso": 2.0
+    },
+    {
+     "q": 7,
+     "id": "aberta-calculo",
+     "peso": 1.5
+    }
+   ]
+  },
+  "2": {
+   "altura": 109.0,
+   "aluno": null,
+   "linhas": [
+    {
+     "q": 2,
+     "id": "mult-varias-crowding",
+     "rotulo": "2",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      0,
+      2,
+      3
+     ],
+     "peso": 1.5,
+     "bolhas": [
+      [
+       19.0,
+       50.0
+      ],
+      [
+       26.0,
+       50.0
+      ],
+      [
+       33.0,
+       50.0
+      ],
+      [
+       40.0,
+       50.0
+      ],
+      [
+       47.0,
+       50.0
+      ]
+     ]
+    },
+    {
+     "q": 3,
+     "id": "mult-integral",
+     "rotulo": "3",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d"
+     ],
+     "corretas": [
+      3
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       57.0
+      ],
+      [
+       26.0,
+       57.0
+      ],
+      [
+       33.0,
+       57.0
+      ],
+      [
+       40.0,
+       57.0
+      ]
+     ]
+    },
+    {
+     "q": 4,
+     "id": "vf-ws-ps",
+     "rotulo": "4a",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       64.0
+      ],
+      [
+       26.0,
+       64.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 4,
+     "id": "vf-ws-ps",
+     "rotulo": "4b",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       71.0
+      ],
+      [
+       26.0,
+       71.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 4,
+     "id": "vf-ws-ps",
+     "rotulo": "4c",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       78.0
+      ],
+      [
+       26.0,
+       78.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 4,
+     "id": "vf-ws-ps",
+     "rotulo": "4d",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       85.0
+      ],
+      [
+       26.0,
+       85.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 5,
+     "id": "mult-multiplicador",
+     "rotulo": "5",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       92.0
+      ],
+      [
+       26.0,
+       92.0
+      ],
+      [
+       33.0,
+       92.0
+      ],
+      [
+       40.0,
+       92.0
+      ],
+      [
+       47.0,
+       92.0
+      ]
+     ]
+    },
+    {
+     "q": 6,
+     "id": "mult-grego",
+     "rotulo": "6",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       99.0
+      ],
+      [
+       26.0,
+       99.0
+      ],
+      [
+       33.0,
+       99.0
+      ],
+      [
+       40.0,
+       99.0
+      ],
+      [
+       47.0,
+       99.0
+      ]
+     ]
+    }
+   ],
+   "abertas": [
+    {
+     "q": 1,
+     "id": "aberta-islm",
+     "peso": 2.0
+    },
+    {
+     "q": 7,
+     "id": "aberta-calculo",
+     "peso": 1.5
+    }
+   ]
+  },
+  "3": {
+   "altura": 109.0,
+   "aluno": null,
+   "linhas": [
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3a",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       50.0
+      ],
+      [
+       26.0,
+       50.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3b",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       57.0
+      ],
+      [
+       26.0,
+       57.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3c",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       64.0
+      ],
+      [
+       26.0,
+       64.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 3,
+     "id": "vf-ws-ps",
+     "rotulo": "3d",
+     "tipo": "vf",
+     "opcoes": [
+      "V",
+      "F"
+     ],
+     "corretas": [
+      1
+     ],
+     "peso": 2.0,
+     "bolhas": [
+      [
+       19.0,
+       71.0
+      ],
+      [
+       26.0,
+       71.0
+      ]
+     ],
+     "itens": 4
+    },
+    {
+     "q": 4,
+     "id": "mult-integral",
+     "rotulo": "4",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d"
+     ],
+     "corretas": [
+      3
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       78.0
+      ],
+      [
+       26.0,
+       78.0
+      ],
+      [
+       33.0,
+       78.0
+      ],
+      [
+       40.0,
+       78.0
+      ]
+     ]
+    },
+    {
+     "q": 5,
+     "id": "mult-varias-crowding",
+     "rotulo": "5",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      1,
+      3,
+      4
+     ],
+     "peso": 1.5,
+     "bolhas": [
+      [
+       19.0,
+       85.0
+      ],
+      [
+       26.0,
+       85.0
+      ],
+      [
+       33.0,
+       85.0
+      ],
+      [
+       40.0,
+       85.0
+      ],
+      [
+       47.0,
+       85.0
+      ]
+     ]
+    },
+    {
+     "q": 6,
+     "id": "mult-multiplicador",
+     "rotulo": "6",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      3
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       92.0
+      ],
+      [
+       26.0,
+       92.0
+      ],
+      [
+       33.0,
+       92.0
+      ],
+      [
+       40.0,
+       92.0
+      ],
+      [
+       47.0,
+       92.0
+      ]
+     ]
+    },
+    {
+     "q": 7,
+     "id": "mult-grego",
+     "rotulo": "7",
+     "tipo": "multipla",
+     "opcoes": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+     ],
+     "corretas": [
+      0
+     ],
+     "peso": 1.0,
+     "bolhas": [
+      [
+       19.0,
+       99.0
+      ],
+      [
+       26.0,
+       99.0
+      ],
+      [
+       33.0,
+       99.0
+      ],
+      [
+       40.0,
+       99.0
+      ],
+      [
+       47.0,
+       99.0
+      ]
+     ]
+    }
+   ],
+   "abertas": [
+    {
+     "q": 1,
+     "id": "aberta-islm",
+     "peso": 2.0
+    },
+    {
+     "q": 2,
+     "id": "aberta-calculo",
+     "peso": 1.5
+    }
+   ]
+  }
+ }
+}

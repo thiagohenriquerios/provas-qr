@@ -64,7 +64,7 @@ label{display:block;font-size:14px;color:var(--mut);margin:8px 0 4px}
   <!-- CORRIGIR -->
   <section id="aba-corrigir">
     <div id="tela-inicio">
-      <div id="aviso-sem-gab" class="msg err hide">Nenhum gabarito carregado. Vá em <b>Gabaritos</b> e carregue o arquivo <code>gabarito.json</code> gerado com a prova.</div>
+      <div id="aviso-sem-gab" class="msg err hide">Nenhum gabarito carregado. Vá em <b>Gabaritos</b> e carregue o arquivo <code>gabarito.json</code> gerado com a prova, ou <button class="btn" data-exemplo style="margin-top:8px">Carregar prova de exemplo</button></div>
       <button class="btn pri big" id="bt-camera">📷 Abrir câmera</button>
       <label class="btn big" for="in-foto">🖼️ Usar uma foto</label>
       <input type="file" id="in-foto" accept="image/*" capture="environment" class="hide">
@@ -118,6 +118,7 @@ label{display:block;font-size:14px;color:var(--mut);margin:8px 0 4px}
   <section id="aba-gabaritos" class="hide">
     <div class="card">
       <label class="btn pri big" for="in-gab">📂 Carregar gabarito.json</label>
+      <button class="btn big" data-exemplo>🧪 Carregar prova de exemplo</button>
       <input type="file" id="in-gab" accept=".json,application/json" class="hide">
       <p class="mut">O gabarito fica guardado só neste aparelho. Ele <b>não</b> vai no QR da prova, então os alunos não conseguem lê-lo.</p>
       <div id="msg-gab"></div>

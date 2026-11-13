@@ -1,5 +1,5 @@
 "use strict";
-const VERSAO_APP = "1.0.0";
+const VERSAO_APP = "1.0.1";
 const $ = (s) => document.querySelector(s);
 const R = window.PQRReader;
 
@@ -42,6 +42,15 @@ $("#in-gab").addEventListener("change", async (e) => {
     $("#msg-gab").innerHTML = `<div class="msg err">Não consegui ler: ${esc(err.message)}</div>`;
   }
 });
+document.querySelectorAll("[data-exemplo]").forEach((b) => b.addEventListener("click", async () => {
+  try {
+    const g = await fetch("exemplo/gabarito.json", { cache: "no-store" }).then((r) => r.json());
+    gabaritos[g.id] = g; gravar("pqr_gabaritos", gabaritos);
+    $("#msg-gab").innerHTML = `<div class="msg ok">Prova de exemplo carregada.</div>`;
+    $("#msg-inicio").innerHTML = `<div class="msg ok">Prova de exemplo carregada. Toque em Abrir câmera.</div>`;
+    desenharGabaritos(); atualizarAviso();
+  } catch { alert("Não consegui baixar o exemplo. Verifique a internet."); }
+}));
 function desenharGabaritos() {
   const ids = Object.keys(gabaritos);
   $("#lista-gab").innerHTML = ids.length ? ids.map((id) => {
