@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Corretor de Provas</title>
+<meta name="theme-color" content="#1f4e79">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icone-192.png">
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--tx:#1b1f24;--mut:#5f6b7a;--pri:#1f4e79;--ok:#1a7f37;--warn:#c76b00;--err:#b42318;--bd:#d9dee5}
+@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1b2026;--tx:#e8ecf1;--mut:#9aa6b2;--pri:#5b9bd5;--ok:#3fb950;--warn:#e3963e;--err:#f47067;--bd:#2d343c}}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:env(safe-area-inset-bottom)}
+header{background:var(--pri);color:#fff;padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top))}
+header h1{margin:0;font-size:18px}
+nav{display:flex;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+nav button{flex:1;padding:12px 4px;border:0;background:none;color:var(--mut);font:inherit;font-weight:600;border-bottom:3px solid transparent}
+nav button.on{color:var(--pri);border-bottom-color:var(--pri)}
+main{max-width:720px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:16px}
+.btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-weight:600;cursor:pointer;text-align:center}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}
+.btn.big{display:block;width:100%;padding:16px;font-size:18px;margin-bottom:10px}
+.btn.err{color:var(--err)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mut{color:var(--mut);font-size:14px}
+.msg{padding:12px;border-radius:10px;margin:10px 0}
+.msg.err{background:color-mix(in srgb,var(--err) 14%,transparent);color:var(--err)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+#video-box{position:relative;background:#000;border-radius:12px;overflow:hidden}
+#video{width:100%;display:block}
+#video-guia{position:absolute;inset:6%;border:3px dashed rgba(255,255,255,.7);border-radius:8px;pointer-events:none}
+#video-status{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);color:#fff;padding:8px 12px;font-size:14px}
+canvas#foto{width:100%;border-radius:8px;display:block}
+.nota{font-size:34px;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
+td.n,th.n{text-align:right}
+.grade .linha{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--bd)}
+.grade .rot{width:36px;font-weight:700}
+.grade .pts{margin-left:auto;font-size:13px;color:var(--mut);min-width:64px;text-align:right}
+.b{width:38px;height:38px;border-radius:50%;border:2px solid var(--bd);background:var(--card);color:var(--mut);font-weight:700;font-size:13px;cursor:pointer;position:relative}
+.b.x{background:var(--tx);color:var(--card);border-color:var(--tx)}
+.b.q{border-color:var(--warn);border-style:dashed;color:var(--warn)}
+.b.c::after{content:"";position:absolute;right:-3px;top:-3px;width:10px;height:10px;border-radius:50%;background:var(--ok)}
+input[type=text],input[type=number]{font:inherit;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);width:100%}
+label{display:block;font-size:14px;color:var(--mut);margin:8px 0 4px}
+.abertas{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hide{display:none!important}
+.legenda{font-size:13px;color:var(--mut);margin:6px 0}
+.legenda span{display:inline-block;margin-right:10px}
+</style>
+</head>
+<body>
+<header><h1>Corretor de Provas</h1></header>
+<nav>
+  <button data-aba="corrigir" class="on">Corrigir</button>
+  <button data-aba="turma">Turma</button>
+  <button data-aba="gabaritos">Gabaritos</button>
+</nav>
+<main>
+  <!-- CORRIGIR -->
+  <section id="aba-corrigir">
+    <div id="tela-inicio">
+      <div id="aviso-sem-gab" class="msg err hide">Nenhum gabarito carregado. Vá em <b>Gabaritos</b> e carregue o arquivo <code>gabarito.json</code> gerado com a prova.</div>
+      <button class="btn pri big" id="bt-camera">📷 Abrir câmera</button>
+      <label class="btn big" for="in-foto">🖼️ Usar uma foto</label>
+      <input type="file" id="in-foto" accept="image/*" capture="environment" class="hide">
+      <p class="mut">Enquadre o quadro da folha de respostas inteiro, do QR code até os 4 quadrados pretos. A leitura é automática.</p>
+      <div id="msg-inicio"></div>
+    </div>
+    <div id="tela-camera" class="hide">
+      <div id="video-box"><video id="video" playsinline muted></video><div id="video-guia"></div><div id="video-status">Procurando a folha…</div></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="bt-parar">Cancelar</button></div>
+    </div>
+    <div id="tela-revisao" class="hide">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div><div class="mut" id="rev-prova"></div><div class="nota" id="rev-nota"></div><div class="mut" id="rev-detalhe"></div></div>
+        </div>
+        <label for="rev-nome">Nome</label><input type="text" id="rev-nome" autocomplete="off">
+        <label for="rev-mat">Matrícula</label><input type="text" id="rev-mat" autocomplete="off" inputmode="numeric">
+        <div id="rev-abertas-box"><label>Discursivas (pontos)</label><div class="abertas" id="rev-abertas"></div></div>
+      </div>
+      <div class="card">
+        <b>Marcações lidas</b>
+        <div class="legenda"><span>⚫ marcada</span><span style="color:var(--warn)">◌ duvidosa</span><span style="color:var(--ok)">● resposta certa</span></div>
+        <p class="mut" style="margin:4px 0">Toque numa bolha para marcar ou desmarcar. Duvidosas não contam até você confirmar.</p>
+        <div class="grade" id="rev-grade"></div>
+      </div>
+      <div class="card"><canvas id="foto"></canvas></div>
+      <div class="row" style="position:sticky;bottom:8px">
+        <button class="btn" id="bt-descartar" style="flex:1">Descartar</button>
+        <button class="btn pri" id="bt-salvar" style="flex:2">Salvar e próxima</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TURMA -->
+  <section id="aba-turma" class="hide">
+    <div class="card">
+      <label for="sel-prova-turma">Prova</label>
+      <select id="sel-prova-turma" class="btn" style="width:100%"></select>
+      <div id="turma-resumo" class="mut" style="margin-top:8px"></div>
+    </div>
+    <div class="card" style="overflow-x:auto"><table id="turma-tab"></table></div>
+    <div class="card"><b>Acerto por questão</b><p class="mut">Média das notas de cada questão, pela questão original (independe da versão).</p><table id="turma-stats"></table></div>
+    <div class="row">
+      <button class="btn pri" id="bt-csv">⬇️ Baixar planilha (CSV)</button>
+      <button class="btn" id="bt-copiar">Copiar CSV</button>
+      <button class="btn err" id="bt-limpar">Apagar turma</button>
+    </div>
+  </section>
+
+  <!-- GABARITOS -->
+  <section id="aba-gabaritos" class="hide">
+    <div class="card">
+      <label class="btn pri big" for="in-gab">📂 Carregar gabarito.json</label>
+      <input type="file" id="in-gab" accept=".json,application/json" class="hide">
+      <p class="mut">O gabarito fica guardado só neste aparelho. Ele <b>não</b> vai no QR da prova, então os alunos não conseguem lê-lo.</p>
+      <div id="msg-gab"></div>
+    </div>
+    <div id="lista-gab"></div>
+    <p class="mut">Versão do app: <span id="versao-app"></span></p>
+  </section>
+</main>
+<script src="vendor/jsQR.js"></script>
+<script src="reader.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

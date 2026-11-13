@@ -1,0 +1,6 @@
+pyyaml
+qrcode[pil]
+# apenas para os testes:
+opencv-python-headless
+numpy
+pymupdf

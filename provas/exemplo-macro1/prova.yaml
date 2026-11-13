@@ -1,0 +1,128 @@
+# Prova de exemplo. Copie esta pasta para criar uma prova nova.
+# Textos são LaTeX: use $...$ para fórmulas. Letras gregas podem ser
+# \alpha ou digitadas direto (α) dentro de $...$.
+
+id: MACRO1-EXEMPLO-2026          # vai no QR; use um id diferente para cada prova
+titulo: "Macroeconomia I — Prova de exemplo"
+versoes: 3                       # pode trocar na linha de comando: --versoes 5
+
+embaralhar:
+  questoes: true                 # questões com 'fixa: true' não mudam de lugar
+  alternativas: true             # use 'fixar_alternativas: true' numa questão para não embaralhar
+
+pontuacao:
+  # múltipla escolha com mais de uma correta:
+  #   proporcional_desconto  (certas marcadas − erradas marcadas) / nº de certas, mínimo 0
+  #   proporcional           certas marcadas / nº de certas (erradas não descontam)
+  #   tudo_ou_nada
+  multipla_varias: proporcional_desconto
+  # V ou F (cada item):
+  #   proporcional           cada item certo vale peso / nº de itens
+  #   acertos_menos_erros    item errado desconta um item certo, mínimo 0
+  #   tudo_ou_nada
+  vf: proporcional
+
+cabecalho: |
+  \begin{center}
+  {\large\bfseries Universidade Federal de Sergipe}\\
+  Departamento de Economia \textbullet\ Macroeconomia I \textbullet\ Prof.\ Thiago
+  \end{center}
+
+instrucoes: |
+  Duração: 2 horas. É permitido o uso de calculadora simples.
+  Nas questões de múltipla escolha pode haver mais de uma alternativa correta;
+  nelas a nota é proporcional e alternativas erradas marcadas descontam.
+
+questoes:
+  - id: aberta-islm
+    tipo: aberta
+    fixa: true                   # fica sempre como questão 1
+    peso: 2.0
+    enunciado: |
+      Considere o modelo IS-LM representado na figura. Explique, com o auxílio do gráfico,
+      os efeitos de uma política fiscal expansionista sobre $Y$, $r$ e o investimento.
+      Discuta o papel da elasticidade da demanda por moeda à taxa de juros.
+    imagem: figuras/islm.png
+    largura_imagem: 0.45
+    espaco: 7cm
+
+  - id: mult-multiplicador
+    tipo: multipla
+    peso: 1.0
+    enunciado: |
+      Numa economia fechada com $C = c_0 + c_1(Y - T)$, $0 < c_1 < 1$, investimento e gastos
+      do governo exógenos, o multiplicador dos gastos do governo é:
+    alternativas:
+      - texto: $\dfrac{1}{1 - c_1}$
+        correta: true
+      - texto: $\dfrac{c_1}{1 - c_1}$
+      - texto: $1 - c_1$
+      - texto: $\dfrac{1}{c_1}$
+      - texto: $1$
+
+  - id: mult-integral
+    tipo: multipla
+    peso: 1.0
+    enunciado: |
+      Seja $\pi(t) = 2t$ a taxa de inflação instantânea (em \% ao ano). A inflação
+      acumulada entre $t=0$ e $t=3$ é dada por
+      \[ \Pi = \int_{0}^{3} \pi(t)\,dt . \]
+      Quanto vale $\Pi$?
+    alternativas:
+      - texto: $6$
+      - texto: $9$
+        correta: true
+      - texto: $3$
+      - texto: $18$
+
+  - id: mult-varias-crowding
+    tipo: multipla
+    peso: 1.5
+    enunciado: |
+      Sobre o modelo IS-LM, marque \textbf{todas} as afirmativas corretas.
+    alternativas:
+      - texto: Na armadilha da liquidez, a política monetária não altera $r$.
+        correta: true
+      - texto: Quanto mais elástico o investimento à taxa de juros, maior o \emph{crowding out}.
+        correta: true
+      - texto: Uma LM vertical torna a política fiscal mais eficaz.
+      - texto: Um aumento de $T$ desloca a IS para a esquerda.
+        correta: true
+      - texto: Um aumento de $M/P$ desloca a LM para cima.
+
+  - id: vf-ws-ps
+    tipo: vf
+    peso: 2.0
+    enunciado: |
+      No modelo WS-PS, com $W = P^e F(u, z)$ e $P = (1+\mu)W$, julgue os itens:
+    itens:
+      - texto: O salário real de equilíbrio é $\dfrac{W}{P} = \dfrac{1}{1+\mu}$.
+        v: true
+      - texto: Um aumento de $\mu$ reduz a taxa natural de desemprego $u_n$.
+        v: false
+      - texto: Um aumento de $z$ eleva $u_n$.
+        v: true
+      - texto: "A elasticidade $\\varepsilon = \\dfrac{\\partial \\ln F}{\\partial \\ln u}$ é positiva."
+        v: false
+
+  - id: mult-grego
+    tipo: multipla
+    peso: 1.0
+    enunciado: |
+      Na curva de Phillips $\pi_t - \pi_{t-1} = -\alpha\,(u_t - u_n)$, com $\alpha = 0{,}5$,
+      $u_n = 6\%$ e $u_t = 8\%$, a variação da inflação $\Delta\pi$ é:
+    alternativas:
+      - texto: $-1$ ponto percentual
+        correta: true
+      - texto: $+1$ ponto percentual
+      - texto: $-2$ pontos percentuais
+      - texto: $0$
+      - texto: $-0{,}5$ ponto percentual
+
+  - id: aberta-calculo
+    tipo: aberta
+    peso: 1.5
+    enunciado: |
+      Seja $Y = 1000$, $C = 100 + 0{,}8(Y-T)$ e $T = 0{,}25Y$. Calcule o multiplicador
+      $\dfrac{\partial Y}{\partial G}$ e interprete.
+    espaco: 5cm
