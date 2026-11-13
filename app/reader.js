@@ -228,6 +228,13 @@
         if (cert.size === 1) pts = hit === 1 && err === 0 ? Q.peso : 0;
         else if (modo.multipla_varias === "tudo_ou_nada") pts = hit === cert.size && !err ? Q.peso : 0;
         else if (modo.multipla_varias === "proporcional") pts = (hit / cert.size) * Q.peso;
+        else if (modo.multipla_varias === "por_alternativa") {
+          // cada alternativa é um V/F: marcada = V, em branco = F
+          const n = ln.opcoes.length;
+          let ok = 0;
+          for (let k = 0; k < n; k++) if (marc.includes(k) === cert.has(k)) ok++;
+          pts = (ok / n) * Q.peso;
+        }
         else pts = Math.max(0, (hit - err) / cert.size) * Q.peso;
       } else { // vf
         const k = Q.linhas.length;

@@ -313,7 +313,7 @@ def main() -> None:
     gab = {
         "formato": FORMATO, "id": str(prova["id"]), "titulo": prova.get("titulo", ""),
         "pontuacao": {
-            "multipla_varias": prova.get("pontuacao", {}).get("multipla_varias", "proporcional_desconto"),
+            "multipla_varias": prova.get("pontuacao", {}).get("multipla_varias", "por_alternativa"),
             "vf": prova.get("pontuacao", {}).get("vf", "proporcional"),
         },
         "layout": {"largura": LARGURA, "marcador": MARCADOR, "qr": [QR_X, QR_Y, QR_TAM], "bolha_r": BOLHA_R},

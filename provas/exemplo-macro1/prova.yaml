@@ -14,8 +14,9 @@ pontuacao:
   # múltipla escolha com mais de uma correta:
   #   proporcional_desconto  (certas marcadas − erradas marcadas) / nº de certas, mínimo 0
   #   proporcional           certas marcadas / nº de certas (erradas não descontam)
+  #   por_alternativa        cada alternativa vale peso / nº de alternativas: marcada = V, em branco = F
   #   tudo_ou_nada
-  multipla_varias: proporcional_desconto
+  multipla_varias: por_alternativa
   # V ou F (cada item):
   #   proporcional           cada item certo vale peso / nº de itens
   #   acertos_menos_erros    item errado desconta um item certo, mínimo 0
@@ -31,7 +32,7 @@ cabecalho: |
 instrucoes: |
   Duração: 2 horas. É permitido o uso de calculadora simples.
   Nas questões de múltipla escolha pode haver mais de uma alternativa correta;
-  nelas a nota é proporcional e alternativas erradas marcadas descontam.
+  cada alternativa vale como um item de V ou F: marcar = verdadeira, deixar em branco = falsa.
 
 questoes:
   - id: aberta-islm
