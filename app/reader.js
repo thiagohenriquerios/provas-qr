@@ -114,8 +114,8 @@
 
   function parseQR(txt) {
     const p = (txt || "").split(";");
-    if (p.length !== 3 || p[0] !== "PQR1") return null;
-    return { id: p[1], versao: p[2] };
+    if ((p.length !== 3 && p.length !== 4) || p[0] !== "PQR1") return null;
+    return { id: p[1], versao: p[2], aluno: p.length === 4 ? +p[3] : null };
   }
 
   function lerFolha(rgba, w, h, jsQR, gabaritos) {
@@ -127,7 +127,10 @@
     if (!gab) return { ok: false, erro: `Gabarito da prova ${info.id} não carregado.`, id: info.id };
     const ver = gab.versoes[info.versao];
     if (!ver) return { ok: false, erro: `Versão ${info.versao} não existe no gabarito de ${info.id}.` };
-    return lerComQR(rgba, w, h, qr.location, info, gab, ver);
+    const res = lerComQR(rgba, w, h, qr.location, info, gab, ver);
+    if (res.ok && info.aluno && gab.alunos && gab.alunos[info.aluno - 1])
+      res.aluno = { n: info.aluno, nome: gab.alunos[info.aluno - 1].nome, matricula: gab.alunos[info.aluno - 1].matricula || "" };
+    return res;
   }
 
   function lerComQR(rgba, w, h, loc, info, gab, ver) {
@@ -204,7 +207,7 @@
         for (const v of dentro) if (v < branco - 0.45 * faixa) esc++;
         return esc / dentro.length;
       });
-      const estado = marcas.map((m) => (m >= 0.42 ? "x" : m >= 0.2 ? "?" : ""));
+      const estado = marcas.map((m) => (m >= 0.55 ? "x" : m >= 0.2 ? "?" : ""));
       return { marcas, estado };
     });
     return { ok: true, id: info.id, versao: info.versao, gab, ver, H, linhas, marcadores };

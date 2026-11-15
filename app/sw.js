@@ -1,6 +1,6 @@
 // Cache para funcionar offline. Mude CACHE ao publicar uma versão nova do app.
-const CACHE = "corretor-v1.0.2";
-const ARQS = ["./", "index.html", "app.js", "reader.js", "vendor/jsQR.js", "manifest.webmanifest", "icone.svg", "icone-192.png", "icone-512.png"];
+const CACHE = "corretor-v2.0.0";
+const ARQS = ["./", "index.html", "app.js", "reader.js", "vendor/jsQR.js", "vendor/jszip.min.js", "vendor/qrcode.min.js", "vendor/jspdf.umd.min.js", "criador.js", "criar.js", "manifest.webmanifest", "icone.svg", "icone-192.png", "icone-512.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ARQS))); self.skipWaiting(); });
 self.addEventListener("activate", (e) => {
   e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))));

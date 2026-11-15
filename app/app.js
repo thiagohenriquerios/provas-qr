@@ -1,5 +1,5 @@
 "use strict";
-const VERSAO_APP = "1.0.2";
+const VERSAO_APP = "2.0.0";
 const $ = (s) => document.querySelector(s);
 const R = window.PQRReader;
 
@@ -21,7 +21,7 @@ const fmt = (x) => (Math.round(x * 100) / 100).toLocaleString("pt-BR", { minimum
 document.querySelectorAll("nav button").forEach((b) => b.addEventListener("click", () => abrirAba(b.dataset.aba)));
 function abrirAba(nome) {
   document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.aba === nome));
-  ["corrigir", "turma", "gabaritos"].forEach((a) => $("#aba-" + a).classList.toggle("hide", a !== nome));
+  ["criar", "corrigir", "turma", "gabaritos"].forEach((a) => $("#aba-" + a).classList.toggle("hide", a !== nome));
   if (nome === "turma") desenharTurma();
   if (nome === "gabaritos") desenharGabaritos();
   if (nome !== "corrigir") pararCamera();
@@ -154,11 +154,13 @@ function mostrar(tela) {
 // ---------------- revisão ----------------
 let atual = null; // {gab, ver, versao, marc: [[estado...]], abertas: {}, editando}
 function abrirRevisao(res, canvasFonte) {
-  const regAnterior = (turmas[res.id] || []).find((r) => r.versao === res.versao && res.ver.aluno);
+  const alunoQR = res.aluno || (res.ver.aluno ? { n: null, ...res.ver.aluno } : null);
+  const regAnterior = alunoQR ? (turmas[res.id] || []).find((r) => (res.aluno ? r.alunoN === res.aluno.n : r.versao === res.versao)) : null;
   atual = {
     id: res.id, versao: res.versao, gab: res.gab, ver: res.ver,
     estado: res.linhas.map((l) => l.estado.slice()),
     abertas: regAnterior ? { ...regAnterior.abertas } : {},
+    alunoN: res.aluno ? res.aluno.n : null, nomeImg: null,
   };
   // foto com sobreposição
   const f = $("#foto");
@@ -176,7 +178,13 @@ function abrirRevisao(res, canvasFonte) {
   }));
   res.marcadores.forEach(([x, y]) => { c.fillStyle = "#e3963e"; c.beginPath(); c.arc(x, y, 6, 0, 7); c.fill(); });
 
-  const aluno = res.ver.aluno;
+  const aluno = alunoQR;
+  // recorte do nome escrito à mão (quando a folha não tem nome impresso)
+  const img = $("#rev-nomeimg");
+  atual.nomeImg = !aluno && res.gab.layout.nome ? recorteNome(res, canvasFonte) : null;
+  img.classList.toggle("hide", !atual.nomeImg);
+  if (atual.nomeImg) img.src = atual.nomeImg;
+  $("#lista-nomes").innerHTML = (res.gab.alunos || []).map((a) => `<option value="${esc(a.nome)}">`).join("");
   $("#rev-nome").value = aluno ? aluno.nome : (regAnterior ? regAnterior.nome : "");
   $("#rev-mat").value = aluno ? (aluno.matricula || "") : (regAnterior ? regAnterior.matricula : "");
   $("#rev-prova").textContent = `${res.gab.titulo || res.id} · versão ${res.versao}`;
@@ -242,9 +250,10 @@ $("#bt-salvar").addEventListener("click", () => {
     marcadas: marcadas(), abertas: { ...atual.abertas },
     objetivas: atual.pts.objetivas, discursivas: atual.pts.abertas, total: atual.pts.total,
     detalhes: atual.pts.detalhes, data: new Date().toISOString(),
+    alunoN: atual.alunoN, nomeImg: nome ? null : atual.nomeImg,
   };
   // mesma prova personalizada (versão por aluno) ou mesmo nome+versão: substitui
-  const idx = lista.findIndex((r) => (atual.ver.aluno && r.versao === reg.versao) ||
+  const idx = lista.findIndex((r) => (reg.alunoN && r.alunoN === reg.alunoN) || (atual.ver.aluno && r.versao === reg.versao) ||
     (nome && r.nome.toLowerCase() === nome.toLowerCase()));
   if (idx >= 0) {
     if (!confirm(`Já existe uma correção de ${lista[idx].nome || "versão " + lista[idx].versao}. Substituir?`)) return;
@@ -265,9 +274,11 @@ function desenharTurma() {
   const id = sel.value, lista = (turmas[id] || []).slice().sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
   if (!id) { $("#turma-tab").innerHTML = ""; $("#turma-resumo").textContent = "Nenhuma prova."; $("#turma-stats").innerHTML = ""; return; }
   const media = lista.length ? lista.reduce((s, r) => s + r.total, 0) / lista.length : 0;
-  $("#turma-resumo").textContent = `${lista.length} prova(s) corrigida(s) · média ${fmt(media)}`;
+  const gT = gabaritos[id];
+  const faltam = gT && gT.alunos ? gT.alunos.filter((a, i) => !lista.some((r) => r.alunoN === i + 1)).map((a) => a.nome) : [];
+  $("#turma-resumo").textContent = `${lista.length} prova(s) corrigida(s) · média ${fmt(media)}` + (faltam.length ? ` · faltam ${faltam.length}: ${faltam.join(", ")}` : "");
   $("#turma-tab").innerHTML = "<tr><th>Nome</th><th>Versão</th><th class='n'>Obj.</th><th class='n'>Disc.</th><th class='n'>Total</th><th></th></tr>" +
-    lista.map((r) => `<tr><td>${esc(r.nome || "—")}<div class="mut">${esc(r.matricula || "")}</div></td><td>${esc(r.versao)}</td>` +
+    lista.map((r) => `<tr><td>${r.nome ? esc(r.nome) : r.nomeImg ? `<img class="nomeimg" style="max-width:160px;margin:0" src="${r.nomeImg}">` : "—"}<div class="mut">${esc(r.matricula || "")}</div></td><td>${esc(r.versao)}</td>` +
       `<td class="n">${fmt(r.objetivas)}</td><td class="n">${fmt(r.discursivas)}</td><td class="n"><b>${fmt(r.total)}</b></td>` +
       `<td><button class="btn" style="padding:4px 8px" data-del="${esc(r.data)}">✕</button></td></tr>`).join("");
   $("#turma-tab").querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => {
@@ -321,6 +332,22 @@ $("#bt-limpar").addEventListener("click", () => {
   delete turmas[id]; salvarTurmas(); desenharTurma();
 });
 
+function recorteNome(res, fonte) {
+  const [x0, y0, w, h] = res.gab.layout.nome, k = 4; // 4 px por mm
+  const src = fonte.getContext("2d").getImageData(0, 0, fonte.width, fonte.height);
+  const out = document.createElement("canvas"); out.width = w * k; out.height = h * k;
+  const oc = out.getContext("2d"), od = oc.createImageData(out.width, out.height);
+  for (let j = 0; j < out.height; j++) for (let i = 0; i < out.width; i++) {
+    const [x, y] = R.aplicar(res.H, x0 + i / k, y0 + j / k);
+    const xi = Math.round(x), yi = Math.round(y), o = (j * out.width + i) * 4;
+    od.data[o + 3] = 255;
+    if (xi < 0 || yi < 0 || xi >= fonte.width || yi >= fonte.height) { od.data[o] = od.data[o + 1] = od.data[o + 2] = 255; continue; }
+    const q = (yi * fonte.width + xi) * 4;
+    od.data[o] = src.data[q]; od.data[o + 1] = src.data[q + 1]; od.data[o + 2] = src.data[q + 2];
+  }
+  oc.putImageData(od, 0, 0);
+  return out.toDataURL("image/jpeg", 0.6);
+}
 function esc(s) { return String(s ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch])); }
 
 $("#versao-app").textContent = VERSAO_APP;

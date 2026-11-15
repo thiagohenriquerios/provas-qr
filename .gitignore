@@ -7,3 +7,5 @@ __pycache__/
 .claude/
 qr_app.png
 folhas-teste.pdf
+testes/saida-web/
+testes/prova-mae-*.docx

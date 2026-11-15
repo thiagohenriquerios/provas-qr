@@ -95,3 +95,14 @@ app/                    app de correção (publicado no GitHub Pages)
 provas/exemplo-macro1/  prova de exemplo
 testes/                 simulador de fotos e teste do leitor
 ```
+
+## Criar a prova pelo app, a partir do Word
+
+Na aba **Criar prova** do app:
+
+1. Escolha o `.docx` da prova mãe. Cada questão começa com `1.`, `2)` ou `Questão 3` (ou lista numerada do Word); cada alternativa num parágrafo próprio começando com `a)`, `(b)` ou `C.`; itens de V ou F começam com `( )`. Questão sem alternativas é discursiva.
+2. Marque o gabarito da prova mãe (tocando nas letras ou digitando `1 B; 2 AC; 3 VFV; 4 aberta`), os pesos e as regras de pontuação.
+3. Escolha quantas versões gerar. Cada versão embaralha questões e alternativas (questões marcadas como fixas não mudam de lugar) e sai como um `.docx` com a folha de respostas na primeira página. O gabarito de cada versão é calculado a partir do gabarito mãe e já fica carregado no app.
+4. Opcional: cole a lista de alunos. Aí sai também um PDF com uma folha de respostas por aluno, com o nome impresso e no QR; na correção o nome entra sozinho. Sem lista, o app mostra o recorte do nome escrito à mão para você digitar.
+
+Equações, imagens e tabelas do Word são mantidas, porque o app só muda a ordem dos parágrafos.

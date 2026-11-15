@@ -12,19 +12,32 @@ import numpy as np
 import pymupdf
 
 saida = Path(sys.argv[1])
-gab = json.loads((saida / "gabarito.json").read_text(encoding="utf-8"))
+PDF = sys.argv[2] if len(sys.argv) > 2 else "prova.pdf"
+GAB = sys.argv[3] if len(sys.argv) > 3 else "gabarito.json"
+gab = json.loads((saida / GAB).read_text(encoding="utf-8"))
 destino = Path(__file__).parent / "fotos"
 destino.mkdir(exist_ok=True)
 for f in destino.glob("*"):
     f.unlink()
 
-doc = pymupdf.open(saida / "prova.pdf")
-# página inicial de cada versão = páginas cujo texto contém "Prova <id>"
-inicios = [i for i in range(len(doc)) if f"Prova {gab['id']}" in doc[i].get_text()]
-versoes = list(gab["versoes"].keys())
-assert len(inicios) == len(versoes), (inicios, versoes)
-
 DPI = 200
+pdfs = sorted(saida.glob(PDF))
+inicios, versoes = [], []
+if PDF == "prova.pdf":
+    doc = pymupdf.open(saida / "prova.pdf")
+    # página inicial de cada versão = páginas cujo texto contém "Prova <id>"
+    inicios = [(doc, i) for i in range(len(doc)) if f"Prova {gab['id']}" in doc[i].get_text()]
+    versoes = list(gab["versoes"].keys())
+else:
+    # folhas geradas pelo app (imagem, sem texto): 1ª página de cada .pdf, ou todas as páginas do PDF de folhas nominais
+    for f in pdfs:
+        d = pymupdf.open(f)
+        if gab.get("alunos"):
+            for i in range(len(d)):
+                inicios.append((d, i)); versoes.append(gab["alunos"][i]["versao"])
+        else:
+            inicios.append((d, 0)); versoes.append(f.stem.rsplit("-", 1)[1])
+assert len(inicios) == len(versoes), (inicios, versoes)
 rng = random.Random(7)
 casos = []
 
@@ -32,11 +45,10 @@ casos = []
 def achar_marcadores(img):
     _, b = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY_INV)
     cs, _ = cv2.findContours(b, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    lado = 7 / 25.4 * DPI
     c = []
     for k in cs:
         x, y, w, h = cv2.boundingRect(k)
-        if abs(w - lado) < 4 and abs(h - lado) < 4 and cv2.contourArea(k) > 0.8 * w * h:
+        if 4 / 25.4 * DPI < w < 9 / 25.4 * DPI and abs(w - h) < 4 and (b[y:y + h, x:x + w] > 0).mean() > 0.9:
             c.append((x + w / 2, y + h / 2))
     c.sort(key=lambda p: (p[1], p[0]))
     tl, tr = sorted(c[:2]); bl, br = sorted(c[2:4])
@@ -44,7 +56,7 @@ def achar_marcadores(img):
 
 
 cenarios = ["reto", "inclinado", "perspectiva", "invertido", "lapis_fraco", "sombra", "x_e_rasura", "longe"]
-for vi, (pag, ver) in enumerate(zip(inicios, versoes)):
+for vi, ((doc, pag), ver) in enumerate(zip(inicios, versoes)):
     V = gab["versoes"][ver]
     pix = doc[pag].get_pixmap(dpi=DPI, colorspace=pymupdf.csGRAY)
     base = np.frombuffer(pix.samples, np.uint8).reshape(pix.h, pix.w).copy()
@@ -117,10 +129,10 @@ for vi, (pag, ver) in enumerate(zip(inicios, versoes)):
         esc = alvo / max(out.shape)
         out = cv2.resize(out, None, fx=esc, fy=esc, interpolation=cv2.INTER_AREA)
         rgba = cv2.cvtColor(out, cv2.COLOR_GRAY2RGBA)
-        nome = f"v{ver}_{cen}"
+        nome = f"p{vi + 1}_v{ver}_{cen}"
         (destino / f"{nome}.rgba").write_bytes(rgba.tobytes())
         cv2.imwrite(str(destino / f"{nome}.jpg"), out)
-        casos.append({"nome": nome, "w": out.shape[1], "h": out.shape[0], "esperado": esperado, "duvida": duvida})
+        casos.append({"nome": nome, "aluno": vi + 1 if gab.get("alunos") else None, "w": out.shape[1], "h": out.shape[0], "esperado": esperado, "duvida": duvida})
 
 (destino / "casos.json").write_text(json.dumps(casos), encoding="utf-8")
 print(f"{len(casos)} fotos simuladas em {destino}")

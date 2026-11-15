@@ -13,6 +13,7 @@ for (const c of casos) {
   const res = R.lerFolha(rgba, c.w, c.h, jsQR, { [gab.id]: gab });
   if (!res.ok) { console.log(`FALHOU  ${c.nome}: ${res.erro} ${res.marcador ?? ""}`); falhas++; continue; }
   const erros = [];
+  if (c.aluno && (!res.aluno || res.aluno.n !== c.aluno)) erros.push(`aluno esperado ${c.aluno}, lido ${JSON.stringify(res.aluno)}`);
   res.linhas.forEach((ln, i) => {
     totalLinhas++;
     const lidas = ln.estado.map((e, k) => (e === "x" ? k : -1)).filter((k) => k >= 0);
