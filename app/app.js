@@ -1,5 +1,5 @@
 "use strict";
-const VERSAO_APP = "2.0.1";
+const VERSAO_APP = "2.0.2";
 const $ = (s) => document.querySelector(s);
 const R = window.PQRReader;
 

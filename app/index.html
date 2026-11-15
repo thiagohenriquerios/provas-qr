@@ -121,10 +121,10 @@ details summary{cursor:pointer;font-weight:600;color:var(--pri)}
     <div class="card hide" id="card-gerar">
       <h3 style="margin-top:0"><span class="passo">3</span>Gerar as provas</h3>
       <label for="c-nv">Quantas versões diferentes?</label><input type="number" id="c-nv" min="1" max="26" value="3" inputmode="numeric">
-      <p class="mut">Cada versão muda a ordem das questões e das alternativas. Questões marcadas como “fixa” não saem do lugar.</p>
+      <p class="mut">A versão não é impressa em lugar nenhum da prova; só o QR code identifica qual é. Separe as pilhas pelo nome do arquivo. Cada versão muda a ordem das questões e das alternativas. Questões marcadas como “fixa” não saem do lugar.</p>
       <label for="c-nomes">Nomes dos alunos (opcional, um por linha)</label>
       <textarea id="c-nomes" placeholder="Ana Souza&#10;Bruno Lima"></textarea>
-      <p class="mut">Com nomes, cada aluno recebe uma folha de respostas com o nome impresso (as versões vão em rodízio) e o app lança o nome sozinho na correção. Sem nomes, a folha sai na primeira página de cada versão, com um campo para o aluno escrever o nome.</p>
+      <p class="mut">Com nomes, cada aluno recebe uma folha de respostas com o nome impresso (as versões vão em rodízio; a lista de quem recebe cada versão fica no gabarito .txt) e o app lança o nome sozinho na correção. Sem nomes, a folha sai na primeira página de cada versão, com um campo para o aluno escrever o nome.</p>
       <button class="btn pri big" id="bt-gerar">⚙️ Gerar provas e gabaritos</button>
       <div id="msg-gerar"></div>
       <div id="saida-gerar"></div>

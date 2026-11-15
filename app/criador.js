@@ -255,7 +255,6 @@
     c.fillStyle = "#000"; c.textBaseline = "alphabetic"; c.textAlign = "left";
     fonte(11, "bold"); c.fillText(cortar(cfg.titulo || cfg.id, 112), TX, 13);
     fonte(9); c.fillText(`Prova ${cfg.id}`, TX, 18.2);
-    fonte(13, "bold"); c.textAlign = "right"; c.fillText(`VERSÃO ${rotulo}`, G.LARGURA - 4, 18.4); c.textAlign = "left";
     if (aluno) {
       fonte(10); c.fillText("Aluno(a):", TX, 27.5);
       fonte(11, "bold"); c.fillText(cortar(aluno, 94), TX + 16, 27.5);
@@ -318,7 +317,6 @@
     const { body } = est;
     const sect = filho(body, "sectPr");
     const novos = [];
-    novos.push(novoP(doc, `${cfg.titulo ? cfg.titulo + " · " : ""}VERSÃO ${rotulo}`, { negrito: true, tam: 10, direita: true }));
     let rid = null;
     if (folhaPng) {
       rid = "rIdPQRfolha";
@@ -410,7 +408,7 @@
         if (i) pdf.addPage();
         pdf.addImage(f.canvas.toDataURL("image/png"), "PNG", (210 - f.largMm) / 2, 22, f.largMm, f.altMm, undefined, "FAST");
         pdf.setFontSize(9);
-        pdf.text(`${i + 1}. ${nomes[i]} — use a prova da VERSÃO ${rot}`, 105, 22 + f.altMm + 8, { align: "center" });
+        pdf.text(`${i + 1}. ${nomes[i]}`, 105, 22 + f.altMm + 8, { align: "center" });
       }
       arquivos.push({ nome: `folhas-de-resposta-${cfg.id}.pdf`, blob: pdf.output("blob") });
       txt.push("ALUNOS", ...gab.alunos.map((a, i) => `  ${i + 1}. ${a.nome}: versão ${a.versao}`), "");
