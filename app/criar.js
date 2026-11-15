@@ -49,14 +49,14 @@
     $("#lista-q").innerHTML = mae.map((Q, i) => {
       const q = analise.questoes[i];
       let corpo = "";
-      if (Q.tipo === "multipla") {
+      if (Q.tipo === "multipla" || Q.tipo === "varias") {
         corpo = q.alts.map((a, k) => `<div class="row" style="flex-wrap:nowrap;margin:3px 0"><button class="op ${Q.corretas.includes(k) ? "on" : ""}" data-i="${i}" data-alt="${k}">${L[k].toUpperCase()}</button><span class="alt">${esc(a.replace(/^\s*\(?[a-h]\s*[).\-–]\s*/i, ""))}</span></div>`).join("");
       } else if (Q.tipo === "vf") {
         corpo = q.alts.map((a, k) => `<div class="row" style="flex-wrap:nowrap;margin:3px 0"><button class="op ${Q.vf[k] === true ? "on" : ""}" data-i="${i}" data-vf="${k}" data-v="1">V</button><button class="op f ${Q.vf[k] === false ? "on" : ""}" data-i="${i}" data-vf="${k}" data-v="0">F</button><span class="alt">${esc(a.replace(/^\s*(\(?[a-h]\s*[).\-–])?\s*[([]\s*[)\]]\s*/i, ""))}</span></div>`).join("");
       } else corpo = '<p class="mut" style="margin:4px 0">Discursiva: você digita a nota na hora de corrigir.</p>';
       const opTipo = (v, t, ok) => `<option value="${v}" ${Q.tipo === v ? "selected" : ""} ${ok ? "" : "disabled"}>${t}</option>`;
       return `<div class="q"><div class="row" style="justify-content:space-between"><b>Questão ${i + 1}</b>` +
-        `<select class="inp" style="width:auto;padding:6px" data-i="${i}" data-tipo>${opTipo("multipla", "Múltipla escolha", q.nAlts >= 2 && q.nAlts <= C.MAX_ALTS)}${opTipo("vf", "V ou F", q.nAlts >= 1)}${opTipo("aberta", "Discursiva", true)}</select></div>` +
+        `<select class="inp" style="width:auto;padding:6px" data-i="${i}" data-tipo>${opTipo("multipla", "Múltipla escolha (1 correta)", q.nAlts >= 2 && q.nAlts <= C.MAX_ALTS)}${opTipo("varias", "Várias corretas", q.nAlts >= 2 && q.nAlts <= C.MAX_ALTS)}${opTipo("vf", "V ou F", q.nAlts >= 1)}${opTipo("aberta", "Discursiva", true)}</select></div>` +
         `<div class="tx">${esc(q.texto)}</div>${corpo}` +
         `<div class="row" style="margin-top:6px"><label style="margin:0">Peso</label><input type="number" step="0.05" min="0" inputmode="decimal" style="width:90px" value="${Q.peso}" data-i="${i}" data-peso>` +
         `<label style="margin:0"><input type="checkbox" data-i="${i}" data-fixa ${Q.fixa ? "checked" : ""}> fixa</label>` +
@@ -70,20 +70,21 @@
     const falta = mae.map((q, i) => (pendente(q) ? i + 1 : 0)).filter(Boolean);
     $("#total-q").innerHTML = `Total: <b>${fmt(tot)}</b> pontos` + (falta.length ? ` · <span style="color:var(--err)">sem gabarito: questão ${falta.join(", ")}</span>` : " · gabarito completo ✓");
   }
-  const pendente = (q) => (q.tipo === "multipla" && !q.corretas.length) || (q.tipo === "vf" && q.vf.some((v) => v !== true && v !== false));
+  const pendente = (q) => (q.tipo === "multipla" && q.corretas.length !== 1) || (q.tipo === "varias" && !q.corretas.length) || (q.tipo === "vf" && q.vf.some((v) => v !== true && v !== false));
 
   $("#lista-q").addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b) return;
     const Q = mae[+b.dataset.i];
     if (b.dataset.alt !== undefined) {
       const k = +b.dataset.alt;
-      Q.corretas = Q.corretas.includes(k) ? Q.corretas.filter((x) => x !== k) : [...Q.corretas, k].sort();
+      if (Q.tipo === "multipla") Q.corretas = [k]; // múltipla escolha: só uma correta
+      else Q.corretas = Q.corretas.includes(k) ? Q.corretas.filter((x) => x !== k) : [...Q.corretas, k].sort();
     } else if (b.dataset.vf !== undefined) Q.vf[+b.dataset.vf] = b.dataset.v === "1";
     salvarRascunho(); desenharQuestoes();
   });
   $("#lista-q").addEventListener("change", (e) => {
     const t = e.target, Q = mae[+t.dataset.i]; if (!Q) return;
-    if (t.dataset.tipo !== undefined) { Q.tipo = t.value; desenharQuestoes(); }
+    if (t.dataset.tipo !== undefined) { Q.tipo = t.value; if (Q.tipo === "multipla" && Q.corretas.length > 1) Q.corretas = []; desenharQuestoes(); }
     else if (t.dataset.peso !== undefined) { Q.peso = Math.max(0, Number(t.value.replace(",", ".")) || 0); atualizarTotal(); }
     else if (t.dataset.fixa !== undefined) Q.fixa = t.checked;
     else if (t.dataset.fixalt !== undefined) Q.fixarAlts = t.checked;
@@ -102,14 +103,14 @@
       if (!Q) { erros.push(`não existe questão ${m[1]}`); continue; }
       const nA = analise.questoes[i].nAlts;
       if (/^(aberta|disc|dissert)/i.test(v)) Q.tipo = "aberta";
-      else if (/^[VFvf\s,]+$/.test(v) && (Q.tipo === "vf" || v.replace(/[\s,]/g, "").length === nA && /[Vv]/.test(v) && /[Ff]/.test(v) && Q.tipo !== "multipla")) {
+      else if (/^[VFvf\s,]+$/.test(v) && (Q.tipo === "vf" || v.replace(/[\s,]/g, "").length === nA && /[Vv]/.test(v) && /[Ff]/.test(v) && Q.tipo !== "multipla" && Q.tipo !== "varias")) {
         const vals = v.replace(/[\s,]/g, "").toUpperCase().split("");
         if (vals.length !== nA) { erros.push(`questão ${m[1]}: ${vals.length} itens V/F, mas achei ${nA} no Word`); continue; }
         Q.tipo = "vf"; Q.vf = vals.map((c) => c === "V");
       } else {
         const ks = Array.from(new Set((v.match(/[a-h]/gi) || []).map((c) => L.indexOf(c.toLowerCase())))).sort();
         if (!ks.length || ks.some((k) => k >= nA)) { erros.push(`questão ${m[1]}: “${v}” não bate com as ${nA} alternativas`); continue; }
-        Q.tipo = "multipla"; Q.corretas = ks;
+        Q.tipo = ks.length > 1 ? "varias" : "multipla"; Q.corretas = ks;
       }
       n++;
     }
@@ -123,8 +124,8 @@
     if (!/^[A-Z0-9_.-]{1,40}$/.test(id)) return msg("Código da prova: use só letras, números, - _ ou . (sem espaços).");
     const falta = mae.map((q, i) => (pendente(q) ? i + 1 : 0)).filter(Boolean);
     if (falta.length) return msg(`Falta marcar o gabarito da(s) questão(ões) ${falta.join(", ")}.`);
-    const multi = mae.filter((q) => q.tipo === "multipla");
-    if (mae.some((q) => q.tipo === "multipla" && q.nAlts > C.MAX_ALTS)) return msg(`Use no máximo ${C.MAX_ALTS} alternativas por questão.`);
+    const multi = mae.filter((q) => q.tipo === "multipla" || q.tipo === "varias");
+    if (multi.some((q) => q.nAlts > C.MAX_ALTS)) return msg(`Use no máximo ${C.MAX_ALTS} alternativas por questão.`);
     if (!multi.length && !mae.some((q) => q.tipo === "vf")) return msg("A prova não tem nenhuma questão objetiva para a folha de respostas.");
     if (gabaritos[id] && (turmas[id] || []).length &&
       !confirm(`Já existem ${(turmas[id] || []).length} correções salvas para ${id}. Gerar de novo troca o gabarito (as notas já salvas ficam). Continuar?`)) return;
@@ -135,7 +136,7 @@
     };
     $("#bt-gerar").disabled = true; $("#saida-gerar").innerHTML = "";
     try {
-      const { arquivos, gab } = await C.gerarProvas(analise, cfg, mae.map((q) => ({ ...q, peso: Number(q.peso) || 0 })), (t) => msg(esc(t), true));
+      const { arquivos, gab } = await C.gerarProvas(analise, cfg, mae.map((q) => ({ ...q, tipo: q.tipo === "varias" ? "multipla" : q.tipo, peso: Number(q.peso) || 0 })), (t) => msg(esc(t), true));
       gabaritos[id] = gab; gravar("pqr_gabaritos", gabaritos); atualizarAviso();
       msg(`Pronto: ${cfg.versoes} versão(ões)${nomes.length ? ` e ${nomes.length} folhas com nome` : ""}. O gabarito já foi carregado no app: é só ir em <b>Corrigir</b>.`, true);
       mostrarArquivos(arquivos);
